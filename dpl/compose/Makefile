@@ -1,5 +1,5 @@
 # =============================================================================
-# ai-stack-openpawlet — Makefile
+# ai-harness-openpawlet — Makefile
 # =============================================================================
 # OpenPawlet (console + embedded nanobot-fork runtime) on local or hosted models.
 #
@@ -38,7 +38,7 @@ init-env: ## Create envs/$(ENV) from .env.example (never overwrites)
 	echo -e "$(GREEN)[OK] envs/$(ENV) created — set provider + key, then make deploy$(NC)"
 
 smoke: ## Run one OpenPawlet agent turn
-	@$(COMPOSE_CMD) exec -T openpawlet openpawlet agent -m "Reply with exactly: pong"
+	@$(COMPOSE_CMD) exec -T openpawlet openpawlet agent -s smoke:$$(date +%s) -m "Reply with exactly: pong"
 
 shell: ## Open a shell in the OpenPawlet container
 	@$(COMPOSE_CMD) exec openpawlet /bin/bash

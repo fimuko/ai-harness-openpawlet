@@ -20,7 +20,8 @@
       "provider": "${OPENPAWLET_PROVIDER}",
       "model": "${OPENPAWLET_MODEL}",
       "maxTokens": 2048,
-      "contextWindowTokens": 16384
+      "contextWindowTokens": 16384,
+      "maxToolIterations": 20
     }
   },
   "tools": {

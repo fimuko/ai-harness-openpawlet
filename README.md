@@ -1,11 +1,11 @@
-# ai-stack-openpawlet
+# ai-harness-openpawlet
 
 Deployable test stack for [OpenPawlet](https://github.com/JackLuguibin/OpenPawlet),
 a nanobot fork with a web console and an embedded agent runtime, on a model
 backend of your choice: local vLLM (`ai-llm-inference-service`), LiteLLM
 (`ai-requests-router`), OpenRouter or the Claude API.
 
-The nanobot + Langfuse counterpart is `ai-stack-nanobot`. How the two relate,
+The nanobot + Langfuse counterpart is `ai-harness-nanobot`. How the two relate,
 and the known gaps: [docs/architecture.md](docs/architecture.md).
 
 ---

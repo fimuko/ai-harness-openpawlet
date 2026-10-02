@@ -15,9 +15,9 @@ It does **not** wrap nanobot, and it does **not** create a throwaway container
 per task. Like nanobot, it can sandbox each shell command with bubblewrap
 inside its own container.
 
-The nanobot counterpart, with Langfuse, is `ai-stack-nanobot`.
+The nanobot counterpart, with Langfuse, is `ai-harness-nanobot`.
 
-| | OpenPawlet (this repo) | nanobot (`ai-stack-nanobot`) |
+| | OpenPawlet (this repo) | nanobot (`ai-harness-nanobot`) |
 |---|---|---|
 | Upstream | JackLuguibin/OpenPawlet, small (≈100★), last release May 2026 | HKUDS/nanobot, very active (0.3.5, Sep 2026) |
 | UI | Console: dashboard, usage/cost charts, sessions, channels, MCP, cron | WebUI: chat, settings, model presets, apps, automations |
@@ -67,3 +67,8 @@ inference service's env file.
 - **Upstream risk**: a small single-maintainer fork that trails nanobot's
   fixes and features.
 - **No egress control**: bwrap isolates the filesystem, not the network.
+- **Tool loops on small models**: Qwen3-4B sometimes "answers" by calling the
+  `message` tool over and over instead of finishing the turn. The template caps
+  `maxToolIterations` at 20 (upstream default: 200) so such a turn ends in
+  seconds instead of running for many minutes. `make smoke` uses a fresh
+  session each run, so earlier pongs in the history don't feed the loop.

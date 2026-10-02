@@ -1,5 +1,5 @@
 # =============================================================================
-# ai-stack-openpawlet — Compose Configuration
+# ai-harness-openpawlet — Compose Configuration
 # =============================================================================
 # OpenPawlet: web console + embedded agent runtime (a nanobot fork), on one
 # model backend chosen by OPENPAWLET_PROVIDER:
@@ -12,7 +12,7 @@
 #   make deploy
 # =============================================================================
 
-name: ${STACK_NAME:-ai-stack-openpawlet-cpu}
+name: ${STACK_NAME:-ai-harness-openpawlet-cpu}
 
 services:
 
@@ -23,11 +23,11 @@ services:
       dockerfile: src/openpawlet/Containerfile
       args:
         BUILD_DATE: ${BUILD_DATE:-}
-        PROJECT_NAME: ${PROJECT_NAME:-ai-stack-openpawlet}
+        PROJECT_NAME: ${PROJECT_NAME:-ai-harness-openpawlet}
         OPENPAWLET_VERSION: ${OPENPAWLET_VERSION:-0.4.1}
 
-    image: ${IMAGE_NAME:-ai-stack-openpawlet-cpu}:latest
-    container_name: cont_${STACK_NAME:-ai-stack-openpawlet-cpu}_openpawlet
+    image: ${IMAGE_NAME:-ai-harness-openpawlet-cpu}:latest
+    container_name: cont_${STACK_NAME:-ai-harness-openpawlet-cpu}_openpawlet
     # ===== END SHARED BASE PATTERN =====
 
     # ===== TASK-SPECIFIC CODE - MODIFY AS NEEDED =====
@@ -66,9 +66,9 @@ services:
     restart: unless-stopped
 
     networks:
-      - private-ai-stack-openpawlet
+      - private-ai-harness-openpawlet
     # ===== END TASK-SPECIFIC CODE =====
 
 networks:
-  private-ai-stack-openpawlet:
+  private-ai-harness-openpawlet:
     driver: bridge

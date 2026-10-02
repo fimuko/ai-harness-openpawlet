@@ -6,20 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`ai-stack-openpawlet` is a deployable test stack for OpenPawlet, a nanobot
+`ai-harness-openpawlet` is a deployable test stack for OpenPawlet, a nanobot
 fork with a FastAPI console and an embedded agent runtime. There is no custom
 agent code here. The repo is a container image, a config template and
 compose. The design and the upstream findings are in
 [`docs/architecture.md`](docs/architecture.md).
 
-Sibling repos: `ai-stack-nanobot` (the nanobot + Langfuse counterpart),
+Sibling repos: `ai-harness-nanobot` (the nanobot + Langfuse counterpart),
 `ai-llm-inference-service` (vLLM, :8200), `ai-requests-router` (LiteLLM,
 :8401), `ml-task-api-base-shared-code` (shared Makefile, required).
 
 ### Repository Layout
 
 ```
-ai-stack-openpawlet/
+ai-harness-openpawlet/
 ├── docs/architecture.md        # What OpenPawlet is, config rendering, known gaps
 ├── dpl/compose/
 │   ├── Makefile                # shared base include + task targets
