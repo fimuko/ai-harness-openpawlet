@@ -42,6 +42,9 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENPAWLET_EXEC_SANDBOX: ${OPENPAWLET_EXEC_SANDBOX:-}
+      # Browser origins allowed for the console's chat WebSocket (defaults only
+      # cover :8000/:3000, so the published port must be listed or chat gets 403)
+      OPENPAWLET_SERVER_CORS_ORIGINS: '["http://127.0.0.1:${PORT:-8620}","http://localhost:${PORT:-8620}"]'
       TZ: ${TZ:-Europe/Amsterdam}
 
     volumes:
