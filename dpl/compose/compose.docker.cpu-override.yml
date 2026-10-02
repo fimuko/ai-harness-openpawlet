@@ -1,0 +1,16 @@
+# =============================================================================
+# Docker CPU Override Configuration
+# =============================================================================
+# Docker-specific resource limits for CPU deployment.
+# Applied automatically when: RUNTIME=docker COMPUTE_TYPE=cpu
+# =============================================================================
+
+services:
+  openpawlet:
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-1G}
+          cpus: "${CPU_LIMIT:-1.0}"
+        reservations:
+          memory: ${MEMORY_RESERVATION:-256M}

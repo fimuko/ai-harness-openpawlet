@@ -1,0 +1,33 @@
+{
+  "providers": {
+    "vllm": {
+      "apiBase": "${LOCAL_LLM_BASE_URL}",
+      "apiKey": "${LOCAL_LLM_API_KEY}"
+    },
+    "custom": {
+      "apiBase": "${ROUTER_BASE_URL}",
+      "apiKey": "${ROUTER_API_KEY}"
+    },
+    "openrouter": {
+      "apiKey": "${OPENROUTER_API_KEY}"
+    },
+    "anthropic": {
+      "apiKey": "${ANTHROPIC_API_KEY}"
+    }
+  },
+  "agents": {
+    "defaults": {
+      "provider": "${OPENPAWLET_PROVIDER}",
+      "model": "${OPENPAWLET_MODEL}",
+      "maxTokens": 2048,
+      "contextWindowTokens": 16384,
+      "maxToolIterations": 20
+    }
+  },
+  "tools": {
+    "restrictToWorkspace": true,
+    "exec": {
+      "sandbox": "${OPENPAWLET_EXEC_SANDBOX}"
+    }
+  }
+}

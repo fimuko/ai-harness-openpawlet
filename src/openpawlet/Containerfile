@@ -1,0 +1,42 @@
+# =============================================================================
+# OpenPawlet — web console + embedded agent runtime (nanobot fork)
+# =============================================================================
+# Installs the pinned open-pawlet wheel from PyPI (ships the prebuilt SPA).
+# Build context is the repo root.
+# =============================================================================
+
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+ARG OPENPAWLET_VERSION=0.4.1
+ARG BUILD_DATE
+ARG PROJECT_NAME
+LABEL org.opencontainers.image.created=${BUILD_DATE} \
+      org.opencontainers.image.title=${PROJECT_NAME}-openpawlet
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates git bubblewrap && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:$PATH \
+    PYTHONUNBUFFERED=1
+RUN uv venv /opt/venv && \
+    uv pip install --python /opt/venv/bin/python --no-cache "open-pawlet==${OPENPAWLET_VERSION}"
+
+RUN useradd -m -u 1000 -s /bin/bash pawlet
+
+COPY src/openpawlet/config.json /opt/stack/config.template.json
+COPY src/openpawlet/seed_config.py /opt/stack/seed_config.py
+
+USER pawlet
+ENV HOME=/home/pawlet \
+    STACK_CONFIG_TEMPLATE=/opt/stack/config.template.json \
+    STACK_CONFIG_PATH=/home/pawlet/.openpawlet/config.json \
+    OPENPAWLET_SERVER_HOST=0.0.0.0 \
+    OPENPAWLET_SERVER_PORT=8000
+
+# 8000: console UI + REST API + OpenAI-compatible /v1 (unauthenticated)
+EXPOSE 8000
+
+ENTRYPOINT ["python", "/opt/stack/seed_config.py"]
+CMD ["open-pawlet", "start"]

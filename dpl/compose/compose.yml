@@ -1,0 +1,74 @@
+# =============================================================================
+# ai-harness-openpawlet — Compose Configuration
+# =============================================================================
+# OpenPawlet: web console + embedded agent runtime (a nanobot fork), on one
+# model backend chosen by OPENPAWLET_PROVIDER:
+#   vllm       ai-llm-inference-service (vLLM gateway, host :8200)
+#   custom     ai-requests-router (LiteLLM, host :8401)
+#   openrouter OpenRouter (hosted)
+#   anthropic  Claude API (hosted)
+#
+# Usage (via Makefile):
+#   make deploy
+# =============================================================================
+
+name: ${STACK_NAME:-ai-harness-openpawlet-cpu}
+
+services:
+
+  openpawlet:
+    # ===== SHARED BASE PATTERN - DO NOT MODIFY IN CHILD REPOS =====
+    build:
+      context: ../../
+      dockerfile: src/openpawlet/Containerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-}
+        PROJECT_NAME: ${PROJECT_NAME:-ai-harness-openpawlet}
+        OPENPAWLET_VERSION: ${OPENPAWLET_VERSION:-0.4.1}
+
+    image: ${IMAGE_NAME:-ai-harness-openpawlet-cpu}:latest
+    container_name: cont_${STACK_NAME:-ai-harness-openpawlet-cpu}_openpawlet
+    # ===== END SHARED BASE PATTERN =====
+
+    # ===== TASK-SPECIFIC CODE - MODIFY AS NEEDED =====
+    environment:
+      # Model backends (rendered into config.json at first start)
+      OPENPAWLET_PROVIDER: ${OPENPAWLET_PROVIDER:-vllm}
+      OPENPAWLET_MODEL: ${OPENPAWLET_MODEL:-default}
+      LOCAL_LLM_BASE_URL: ${LOCAL_LLM_BASE_URL:-http://host.containers.internal:8200/v1}
+      LOCAL_LLM_API_KEY: ${LOCAL_LLM_API_KEY:-}
+      ROUTER_BASE_URL: ${ROUTER_BASE_URL:-http://host.containers.internal:8401/v1}
+      ROUTER_API_KEY: ${ROUTER_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENPAWLET_EXEC_SANDBOX: ${OPENPAWLET_EXEC_SANDBOX:-}
+      # Browser origins allowed for the console's chat WebSocket (defaults only
+      # cover :8000/:3000, so the published port must be listed or chat gets 403)
+      OPENPAWLET_SERVER_CORS_ORIGINS: '["http://127.0.0.1:${PORT:-8620}","http://localhost:${PORT:-8620}"]'
+      TZ: ${TZ:-Europe/Amsterdam}
+
+    volumes:
+      - ${HOST_DATA_PATH:-../../data}/openpawlet:/home/pawlet/.openpawlet
+
+    ports:
+      # Console API is unauthenticated: host loopback only
+      - "127.0.0.1:${PORT:-8620}:8000"
+
+    # Reach host services (vLLM gateway :8200, LiteLLM :8401)
+    extra_hosts:
+      - "host.containers.internal:host-gateway"
+
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    restart: unless-stopped
+
+    networks:
+      - private-ai-harness-openpawlet
+    # ===== END TASK-SPECIFIC CODE =====
+
+networks:
+  private-ai-harness-openpawlet:
+    driver: bridge
