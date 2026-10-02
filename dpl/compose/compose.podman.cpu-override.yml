@@ -1,0 +1,14 @@
+# =============================================================================
+# Podman CPU Override Configuration
+# =============================================================================
+# Podman-specific resource limits for CPU deployment.
+# Applied automatically when: RUNTIME=podman COMPUTE_TYPE=cpu
+# keep-id maps the container's UID 1000 to the host user owning ../../data.
+# =============================================================================
+
+services:
+  openpawlet:
+    userns_mode: keep-id
+    mem_limit: ${MEMORY_LIMIT:-1G}
+    mem_reservation: ${MEMORY_RESERVATION:-256M}
+    cpus: ${CPU_LIMIT:-1.0}

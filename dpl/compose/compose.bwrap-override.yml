@@ -1,0 +1,16 @@
+# =============================================================================
+# bubblewrap exec-sandbox Override
+# =============================================================================
+# Lets bwrap create nested namespaces inside the container. Added by the
+# Makefile when OPENPAWLET_EXEC_SANDBOX=bwrap. Mirrors upstream
+# docker-compose.bwrap.yml. The host must still allow unprivileged user
+# namespaces (Ubuntu: kernel.apparmor_restrict_unprivileged_userns).
+# =============================================================================
+
+services:
+  openpawlet:
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
